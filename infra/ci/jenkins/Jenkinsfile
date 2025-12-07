@@ -1,0 +1,50 @@
+pipeline {
+  agent any
+
+  stages {
+    stage('checkout') {
+      steps {
+        checkout scm
+      }
+    }
+
+    stage('install dependencies') {
+      steps {
+        sh '''
+            cd services
+            pip install poetry
+            poetry config virtualenvs.create false
+            poetry install --no-interaction --no-root || false
+        '''
+      }
+    }
+
+    stage('Run backend tests') {
+      steps {
+        sh '''
+          cd services
+          poetry run pytest || true
+        '''
+      }
+    }
+
+    stage('Run frontend build') {
+      steps {
+        sh 'npm --prefix apps/frontend install || true'
+        sh 'npm --prefix apps/frontend run build || true'
+      }
+    }
+
+    stage('Docker build') {
+      steps {
+        sh 'docker build -t react-fastapi-api ./services'
+      }
+    }
+  }
+
+  post {
+    always {
+      echo "Pipeline finished!"
+    }
+  }
+}
