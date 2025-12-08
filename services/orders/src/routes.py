@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends
-from services.orders.src.service import verify_internal
+from src.service import verify_internal
 
 router = APIRouter()
 

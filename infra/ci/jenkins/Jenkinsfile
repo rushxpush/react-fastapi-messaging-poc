@@ -33,18 +33,30 @@ pipeline {
       }
     }
 
-    stage('Run frontend build') {
+    stage('Build Backend - api_gateway') {
       steps {
-        sh 'npm --prefix apps/frontend install || true'
-        sh 'npm --prefix apps/frontend run build || true'
+        sh '''
+          docker build -t mealapp-api-gateway ./services/api_gateway
+        '''
       }
     }
 
-    stage('Docker build') {
+    stage('Build Backend - orders') {
       steps {
-        sh 'docker build -t react-fastapi-api ./services'
+        sh '''
+          docker build -t mealapp-orders ./services/orders
+        '''
       }
     }
+
+    stage('Build Frontend') {
+      steps {
+        sh '''
+          docker build -t mealapp-frontend ./services/frontend
+        '''
+      }
+    }
+
   }
 
   post {
