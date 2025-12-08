@@ -8,7 +8,6 @@ RUN pip install --no-cache-dir poetry && \
     poetry install --no-interaction --no-root
 
 COPY ./src /app/src
-COPY ./.env /app/.env
 
 ENV PYTHONPATH=/app
 
