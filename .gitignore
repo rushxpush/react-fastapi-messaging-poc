@@ -33,7 +33,7 @@ env/
 env/
 
 # Poetry
-poetry.lock
+# poetry.lock
 
 # Python IDE
 .pytest_cache/
